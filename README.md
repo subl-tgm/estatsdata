@@ -5,7 +5,7 @@ generates data for a mysql database and saves them into the database
 
 ## to recreate project:
 ### prerequisites
-you need to install docker
+you need to install docker and have a ide for developing java (intellij works best)
 then create a docker network using `docker network create networkName`
 next you want to create two docker container,
 the first one is a mysql container, the second one a phpmyadmin (phpmyadmin isnt needed but can give a good GUI to work with and its easy to setup, if you dont want phpmyadmin you also dont need the network)
@@ -14,4 +14,5 @@ docker run -d --name mysqlContainer --network networkName -e MYSQL_ROOT_PASSWORD
 docker run -d --name phpmyadminContainer --network asgard -e PMA_HOST=mysqlContainer -p 8080:80 phpmyadmin
 ```
 you can access the phpmyadmin gui at localhost:8080 now and login with you password and the username 'root'
-next you only need to create a new database and run the generator.sql
+next you only need to create a new database and run the generator.sql file located in the sql folder (the estats.sql file in the sql folder is a testfile you can use to see if ur database works it contains INSERT operations with testdata)
+now you can simply clone the git repository on your pc and execute the MySQL.java file (you might have to change line 16 depending on the name of your container)
