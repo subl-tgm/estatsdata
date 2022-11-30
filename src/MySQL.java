@@ -2,6 +2,11 @@ import java.sql.*;
 
 public class MySQL {
 
+	/**
+	 * @param args
+	 * @throws SQLException
+	 * Connection zur Datenbank aufbauen und Generator aufrufen um Daten zu generieren und in die Datenbank einzufuegen
+	 */
 	public static void main(String[] args) {
 		
 		// Connection zu MySQL aufbauen

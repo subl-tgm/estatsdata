@@ -1,4 +1,5 @@
 # estatsdata
+---
 #### made by niklas brandtner
 first draft for a data generator for estats austria.
 generates data for a mysql database and saves them into the database
@@ -6,10 +7,13 @@ generates data for a mysql database and saves them into the database
 ## to recreate project:
 ### prerequisites
 you need to install docker and have a ide for developing java (intellij works best)
-then create a docker network using `docker network create networkName`
-next you want to create two docker container,
-the first one is a mysql container, the second one a phpmyadmin (phpmyadmin isnt needed but can give a good GUI to work with and its easy to setup, if you dont want phpmyadmin you also dont need the network)
+then create a docker network using 
+```bash
+docker network create networkName
 ```
+next you want to create two docker container,
+the first one is a mysql container, the second one a phpmyadmin (phpmyadmin isn't needed but can give a good GUI to work with, and it's easy to set up, if you don't want phpmyadmin you also don't need the network)
+```bash
 docker run -d --name mysqlContainer --network networkName -e MYSQL_ROOT_PASSWORD="yourPassword" -v C:/path/where/you/want/the/container:/var/lib/mysql -p 3306:3306 mysql
 docker run -d --name phpmyadminContainer --network asgard -e PMA_HOST=mysqlContainer -p 8080:80 phpmyadmin
 ```

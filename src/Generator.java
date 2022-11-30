@@ -2,6 +2,14 @@ import java.sql.*;
 
 public class Generator {
 
+	/**
+	 * @throws SQLException
+	 * Methode zum Generieren von Daten fuer jedes Bundesland und jeden Monat.
+	 * Die Werte werden mit Mindest und Maximumswerten generiert, sodass die Werte eine ungefaehre Realitaet wiederspiegeln.
+	 * @param n steht fuer eines der 9 Bundeslaender
+	 * @param date eine zahl zwischen 1 und 12, fuer die 12 Monate eines Jahres
+	 * @return result String welcher die Insert Query zurueckgibt
+	 */
 	public static String generate(int n,int date) {
 		if(date<1||date>12) {
 			System.out.println("Datum muss eine Zahl zwischen 1 und 12 sein entsprechend dem Monat des Jahres.");
@@ -94,10 +102,10 @@ public class Generator {
 	}
 	
 	/**
-	 * Diese Methode wird verwendet wenn schon Datens�tze mit der gewollten Region und Datum existiert um die Werte upzudaten.
-	 * @param n steht f�r eines der 9 Bundesl�nder
-	 * @param date eine zahl zwischen 1 und 12, f�r die 12 Monate eines Jahres
-	 * @return result String welcher die Update Query zur�ckgibt
+	 * Diese Methode wird verwendet, wenn schon Datensaetze mit der gewollten Region und Datum existiert um die Werte upzudaten.
+	 * @param n steht fuer eines der 9 Bundeslaender
+	 * @param date eine zahl zwischen 1 und 12, fuer die 12 Monate eines Jahres
+	 * @return result String welcher die Update Query zurueckgibt
 	 */
 	public static String generateNew(int n,int date) {
 		if(date<1||date>12) {
@@ -192,6 +200,18 @@ public class Generator {
 		System.out.println(result);
 		return result;
 	}
+
+	/**
+	 * Diese Methode erzeugt mithilfe der zuvor erstellten Daten quasi Summen aus allen Datensätze für ganz Oesterreich jedoch nur für den aktuellen Monat.
+	 * Diese Methode wird verwendet, wenn noch keine Datensaetze fuer ganz Oesterreich und das gewollte Datum existiert um die Werte einzufuegen.
+	 * @param verbrauch Das Array mit den Verbrauchswerten
+	 * @param strompreis Das Array mit den Strompreiswerten
+	 * @param emission Das Array mit den CO2-Emissionenwerten
+	 * @param stromimport Das Array mit den Stromimportwerten
+	 * @param stromexport Das Array mit den Stromexportwerten
+	 * @param date Das Datum des Monats, der betrachtet werden soll
+	 * @return result String welcher die Insert Query zurueckgibt
+	 */
 	public static String generateSum(ResultSet verbrauch,ResultSet strompreis,ResultSet emission,ResultSet stromimport, ResultSet stromexport, int date){
 		try {
 			// Verbrauch:
@@ -232,6 +252,18 @@ public class Generator {
 		}catch(SQLException se){}
 		return null;
 	}
+
+	/**
+	 * Diese Methode berechnet mithilfe der zuvor erstellten Daten quasi Summen aus allen Datensätze für ganz Oesterreich jedoch nur für den aktuellen Monat.
+	 * Diese Methode wird verwendet, wenn es schon davor Daten für ganz Oesterreich gab und sie somit nur aktualisiert werden müssen
+	 * @param verbrauch Das Array mit den Verbrauchswerten
+	 * @param strompreis Das Array mit den Strompreiswerten
+	 * @param emission Das Array mit den CO2-Emissionenwerten
+	 * @param stromimport Das Array mit den Stromimportwerten
+	 * @param stromexport Das Array mit den Stromexportwerten
+	 * @param date Das Datum des Monats, der betrachtet werden soll
+	 * @return result String welcher die Update Query zurueckgibt
+	 */
 	public static String generateSumNew(ResultSet verbrauch,ResultSet strompreis,ResultSet emission,ResultSet stromimport, ResultSet stromexport, int date){
 		try {
 			// Verbrauch:
