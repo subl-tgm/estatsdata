@@ -52,7 +52,6 @@ public class Generator {
 			break;
 		}
 		
-		
 		// stromverbrauch,strompreis,CO2Emissionen,Stromimport,Stromexport
 		
 		// stromverbrauch:
@@ -198,33 +197,35 @@ public class Generator {
 			// Verbrauch:
 			double verbrauchSUM = 0.0;
 			while(verbrauch.next()) {
-				verbrauchSUM+=verbrauch.getDouble(1);
-			}
+				verbrauchSUM=verbrauchSUM+verbrauch.getDouble("stromverbrauch");
+				}
 
 			// Strompreis
-			int strompreisSUM = 0;
+			int strompreisMean = 0;
+			int i=0;
 			while(strompreis.next()) {
-				strompreisSUM+=verbrauch.getInt(1);
+				strompreisMean=strompreisMean+strompreis.getInt("strompreis");
+				i++;
 			}
 
 			// CO2Emission
 			double emissionSUM = 0.0;
 			while(emission.next()) {
-				emissionSUM+=verbrauch.getDouble(1);
+				emissionSUM=emissionSUM+emission.getDouble("CO2Emissionen");
 			}
 
 			// Stromimport
 			double importSUM = 0.0;
 			while(stromimport.next()) {
-				importSUM+=verbrauch.getDouble(1);
+				importSUM+=stromimport.getDouble("Stromimport");
 			}
 
 			// Stromexport
 			double exportSUM = 0.0;
 			while(stromexport.next()) {
-				exportSUM+=verbrauch.getDouble(1);
+				exportSUM+=stromexport.getDouble("Stromexport");
 			}
-			String result="INSERT INTO testdata " + "VALUES ('Oesterreich',100.0,"+verbrauchSUM+","+strompreisSUM+","+emissionSUM+","+importSUM+","+exportSUM+","+date+")";
+			String result="INSERT INTO testdata " + "VALUES ('Oesterreich',100.0,"+verbrauchSUM+","+strompreisMean/i +","+emissionSUM+","+importSUM+","+exportSUM+","+date+")";
 			System.out.println(result);
 			return result;
 
@@ -236,33 +237,31 @@ public class Generator {
 			// Verbrauch:
 			double verbrauchSUM = 0.0;
 			while(verbrauch.next()) {
-				verbrauchSUM+=verbrauch.getDouble(1);
+				verbrauchSUM=verbrauchSUM+verbrauch.getDouble("stromverbrauch");
 			}
-
 			// Strompreis
-			int strompreisSUM = 0;
+			int strompreisMean = 0;
+			int i=0;
 			while(strompreis.next()) {
-				strompreisSUM+=verbrauch.getInt(1);
+				strompreisMean=strompreisMean+strompreis.getInt("strompreis");
+				i++;
 			}
-
 			// CO2Emission
 			double emissionSUM = 0.0;
 			while(emission.next()) {
-				emissionSUM+=verbrauch.getDouble(1);
+				emissionSUM=emissionSUM+emission.getDouble("CO2Emissionen");
 			}
-
 			// Stromimport
 			double importSUM = 0.0;
 			while(stromimport.next()) {
-				importSUM+=verbrauch.getDouble(1);
+				importSUM+=stromimport.getDouble("Stromimport");
 			}
-
 			// Stromexport
 			double exportSUM = 0.0;
 			while(stromexport.next()) {
-				exportSUM+=verbrauch.getDouble(1);
+				exportSUM+=stromexport.getDouble("Stromexport");
 			}
-			String result="UPDATE testdata SET stromverbrauch='"+verbrauchSUM+"',strompreis='"+strompreisSUM+
+			String result="UPDATE testdata SET stromverbrauch='"+verbrauchSUM+"',strompreis='"+strompreisMean/i+
 					"',CO2Emissionen="+emissionSUM+",Stromimport="+importSUM+",Stromexport="+exportSUM+
 					"WHERE date="+date+" AND region='Oesterreich'";
 			System.out.println(result);
