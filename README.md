@@ -1,4 +1,4 @@
-# estatsdata
+# e-Stats Data
 ---
 #### made by niklas brandtner
 This is the repository for my part of the estats austria project. This will contain a Generator, a Java MySQL Connection, SQL Files to create the database as well as all other required library JARs or anything else needed to set-up and run this application.
