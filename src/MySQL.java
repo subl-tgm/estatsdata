@@ -14,7 +14,7 @@ public class MySQL {
 		Statement stmt = null;
 		try {
 			try {
-				Class.forName("com.mysql.cj.jdbc.Driver");
+				Class.forName("com.mysql.jc.jdbc.Driver");
         } catch (Exception e) {
         	System.out.println(e);
         }
