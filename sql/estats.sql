@@ -1,3 +1,4 @@
+--deprecated version only works with old database layout
 DROP TABLE IF EXISTS testdata;
 CREATE TABLE testdata(
    region               VARCHAR(20) NOT NULL
