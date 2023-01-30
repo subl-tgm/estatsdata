@@ -19,7 +19,7 @@ docker run -d --name mysqlContainer --network networkName -e MYSQL_ROOT_PASSWORD
 docker run -d --name phpmyadminContainer --network networkName -e PMA_HOST=mysqlContainer -p 8080:80 phpmyadmin
 ```
 You can access the phpmyadmin GUI at localhost:8080 now and login with your password and the username 'root' <br>
-Next you need to create a new database, best name it "testing" and run the generator.sql file located in the sql folder to create the table where the data from our generator is gonna be saved in. (When naming it something else you might need to change line 24 in `MySQLnew.java`<br> 
+Next you need to create a new database, best name it "testing" and run the `generator.sql` file located in the sql folder to create the table where the data from our generator is gonna be saved in. (When naming it something else you might need to change line 24 in `MySQLnew.java`<br> 
 Now you can clone the git repository in the IDE of your choice.<br>
 IntelliJ: https://www.jetbrains.com/help/idea/set-up-a-git-repository.html <br>
 Eclipse: https://www.geeksforgeeks.org/how-to-clone-a-project-from-github-using-eclipse/ <br>
