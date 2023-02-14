@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 
 public class MySQLnew {
@@ -7,27 +8,35 @@ public class MySQLnew {
         /**
          * @param args
          * @throws SQLException
-         * Connection zur Datenbank aufbauen und Generator aufrufen um Daten zu generieren und in die Datenbank einzufuegen
+         * Connection zur Datenbank aufbauen und Generator aufrufen, um Daten zu generieren und in die Datenbank einzufuegen
          */
         public static void main(String[] args) throws SQLException {
             Date date;
             Timestamp timestamp;
+            Timestamp timestampYesterday;
             // Connection zu MySQL aufbauen
             Connection conn = null;
             Statement stmt = null;
             try {
                 try {
+                    // Treiber damit JDBC funktioniert
                     Class.forName("com.mysql.jc.jdbc.Driver");
                 } catch (Exception e) {
                     System.out.println(e);
                 }
+                // Verbindung zur Datenbank aufbauen
                 conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/testing", "root", "root");
                 System.out.println("Connection is created successfully:");
                 while (true) {
+                    // Timestamp erstellen
                     date = new Date();
                     timestamp = new Timestamp(date.getTime());
+                    // Timestamp von gestern erstellen um die Daten, die älter als gestern sind zu löschen
+                    Instant instant = timestamp.toInstant().minus(java.time.Duration.ofDays(1));
+                    timestampYesterday = Timestamp.from(instant);
                     System.out.println(sdf.format(timestamp) + " oder " + timestamp);
                     try {
+                        // Ein Delay von 8 Sekunden damit die Daten nicht zu schnell generiert werden
                         Thread.sleep(8000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -41,40 +50,43 @@ public class MySQLnew {
                     double stromimport=0;
                     double stromexport=0;
                     int count=0;
-                    for (int j = 0; j < 9; j++) { // cycle durch alle bundesländer
+                    // Diese Schleife geht durch alle Bundesländer und speichert die generierten Daten in der Datenbank
+                    for (int j = 0; j < 9; j++) {
+                        // data ist ein Array mit den Daten die der Generator generiert
                         Double[] data = Generatornew.genData(j);
+                        // da preis ein int ist müssen wir diesen wieder aus dem Double Array umwandeln
                         int preis = data[1].intValue();
-
+                        // Bundesland herausfinden
                         switch(data[5].intValue()) {
                             case 0:
-                                state="Burgenland";
+                                state = "Burgenland";
                                 break;
                             case 1:
-                                state="Kaernten";
+                                state = "Kaernten";
                                 break;
                             case 2:
-                                state="Niederoesterreich";
+                                state = "Niederoesterreich";
                                 break;
                             case 3:
-                                state="Oberoesterreich";
+                                state = "Oberoesterreich";
                                 break;
                             case 4:
-                                state="Salzburg";
+                                state = "Salzburg";
                                 break;
                             case 5:
-                                state="Steiermark";
+                                state = "Steiermark";
                                 break;
                             case 6:
-                                state="Tirol";
+                                state = "Tirol";
                                 break;
                             case 7:
-                                state="Vorarlberg";
+                                state = "Vorarlberg";
                                 break;
                             case 8:
-                                state="Wien";
+                                state = "Wien";
                                 break;
                         }
-
+                        // Query für jedes Bundesland erstellen und ausführen
                         String genquery = "INSERT INTO estats " + "VALUES ('" + state + "',0.0," + data[0] + "," + preis + "," + data[2] + "," + data[3] + "," + data[4] + ",'"+sdf.format(timestamp)+"');";
                         stmt.executeUpdate(genquery);
                         System.out.println("Query für: " + state + " erfolgreich");
@@ -84,12 +96,19 @@ public class MySQLnew {
                         stromimport+=data[3];
                         stromexport+=data[4];
                     }
+                    // Strompreis Durchschnitt berechnen
                     strompreis=strompreis/9;
+                    // Query für ganz Österreich erstellen und ausführen
                     String queryAll = "INSERT INTO estats " + "VALUES ('" + "Oesterreich" + "',100.0," + stromverbrauch + "," + strompreis + "," + co2Emissionen + "," + stromimport + "," + stromexport + ",'"+ sdf.format(timestamp)+"')";
                     stmt.executeUpdate(queryAll);
                     // Gesamtstatistiken für ganz Österreich machen
                     System.out.println("Record is inserted in the table successfully..................");
                     System.out.println("Please check it in the MySQL Table..........");
+
+                    // Daten löschen die älter als gestern sind
+                    String sql = "DELETE FROM estats WHERE date < '" + sdf.format(timestampYesterday) + "'";
+                    int anzahlGeloeschterDatensaetze = stmt.executeUpdate(sql);
+                    System.out.println(anzahlGeloeschterDatensaetze + " Datensätze wurden gelöscht.");
                 }
             }catch (SQLException e) {
                 System.out.println(e);
