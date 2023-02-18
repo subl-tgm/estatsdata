@@ -96,6 +96,8 @@ public class MySQLnew {
                         stromimport+=data[3];
                         stromexport+=data[4];
                     }
+
+
                     // Strompreis Durchschnitt berechnen
                     strompreis=strompreis/9;
                     // Query für ganz Österreich erstellen und ausführen
@@ -105,6 +107,20 @@ public class MySQLnew {
                     System.out.println("Record is inserted in the table successfully..................");
                     System.out.println("Please check it in the MySQL Table..........");
 
+                    // Stromverbrauch Anteile berechnen
+                    double oesterreichVerbrauch=0;
+                    ResultSet oesterreichResSet=stmt.executeQuery("SELECT * FROM estats WHERE date='"+sdf.format(timestamp)+"' AND region='Oesterreich'");
+                    while(oesterreichResSet.next()){
+                        oesterreichVerbrauch=oesterreichResSet.getDouble("verbrauch");
+                    }
+                    Statement anteilStatement=conn.createStatement();
+                    ResultSet anteilquery=anteilStatement.executeQuery("SELECT * FROM estats WHERE date='"+sdf.format(timestamp)+"' AND region!='Oesterreich'");
+                    while(anteilquery.next()){
+                        String region = anteilquery.getString("region");
+                        double verbrauch = anteilquery.getDouble("verbrauch");
+                        String sqlAnteil="UPDATE estats SET verbrauchAnteil="+verbrauch/oesterreichVerbrauch*100+" WHERE region='"+region+"' AND date='"+sdf.format(timestamp)+"';";
+                        stmt.executeUpdate(sqlAnteil);
+                    }
                     // Daten löschen die älter als gestern sind
                     String sql = "DELETE FROM estats WHERE date < '" + sdf.format(timestampYesterday) + "'";
                     int anzahlGeloeschterDatensaetze = stmt.executeUpdate(sql);
