@@ -10,3 +10,14 @@ CREATE TABLE estats(
   ,date                 datetime  NOT NULL
   ,PRIMARY KEY(region,date)
 );
+
+DROP TABLE IF EXISTS voraussagen;
+CREATE TABLE voraussagen(
+  region					VARCHAR(20) NOT NULL
+  ,vorverbrauch             decimal(20,5) NOT NULL
+  ,vorpreis      			decimal(20,5) NOT NULL
+  ,voremission            	decimal(20,5) NOT NULL
+  ,vorimport                decimal(20,5) NOT NULL
+  ,vorexport             	decimal(20,5) NOT NULL
+  ,PRIMARY KEY(region)
+);
